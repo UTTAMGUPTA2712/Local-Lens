@@ -1,0 +1,103 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsqlite3-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev libspeechd-dev libxkbcommon-dev libssl-dev
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Package
+        run: |
+          mkdir -p dist/local_lens
+          cp target/release/local_lens dist/local_lens/
+          cp download-models.sh dist/local_lens/
+          cp install.sh dist/local_lens/
+          cp local_lens.desktop dist/local_lens/
+          cp README.md dist/local_lens/
+          cd dist
+          tar -czvf local_lens-linux.tar.gz local_lens
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: local_lens-linux
+          path: dist/local_lens-linux.tar.gz
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build
+        run: cargo build --release
+
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist/local_lens
+          Copy-Item target/release/local_lens.exe -Destination dist/local_lens/
+          Copy-Item download-models.sh -Destination dist/local_lens/
+          Copy-Item README.md -Destination dist/local_lens/
+          Compress-Archive -Path dist/local_lens -DestinationPath dist/local_lens-windows.zip
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: local_lens-windows
+          path: dist/local_lens-windows.zip
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Package
+        run: |
+          mkdir -p dist/local_lens
+          cp target/release/local_lens dist/local_lens/
+          cp download-models.sh dist/local_lens/
+          cp README.md dist/local_lens/
+          cd dist
+          tar -czvf local_lens-macos.tar.gz local_lens
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: local_lens-macos
+          path: dist/local_lens-macos.tar.gz
+
+  release:
+    needs: [build-linux, build-windows, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/local_lens-linux/local_lens-linux.tar.gz
+            artifacts/local_lens-windows/local_lens-windows.zip
+            artifacts/local_lens-macos/local_lens-macos.tar.gz
+          generate_release_notes: true

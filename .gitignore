@@ -8,4 +8,6 @@ build**
 **/.DS_Store
 models/*.onnx
 models/*.json
+models/*.txt
 !models/imagenet-simple-labels.json
+dist/

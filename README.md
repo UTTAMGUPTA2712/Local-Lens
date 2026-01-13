@@ -11,7 +11,19 @@
 -   **Privacy**: No internet connection required for tagging.
 -   **Global Renaming**: Rename tags across your entire library.
 
-## Prerequisites
+## One-Click Downloads
+
+**"I just want to use the app!"**
+
+Go to the [**Releases Page**](https://github.com/uttamgupta2712/local_lens/releases) and download the file for your system:
+
+-   **Windows**: Download `local_lens-windows.zip`. Extract it and run `local_lens.exe`.
+-   **Linux**: Download `local_lens-linux.tar.gz`. Extract it and run `./install.sh`.
+-   **macOS**: Download `local_lens-macos.tar.gz`. Extract it and run `./local_lens`.
+
+*(Note: On first run, models will process or download automatically if using the scripts above)*
+
+## Prerequisites (for building from source)
 
 -   **Rust**: Stable toolchain (install via [rustup](https://rustup.rs/)).
 -   **ExifTool**: Required for writing metadata to files.
@@ -64,3 +76,23 @@
 -   **Frontend**: `egui` (Immediate Mode GUI)
 -   **Inference**: `ort` (ONNX Runtime bindings)
 -   **Database**: `rusqlite`
+
+## Distribution
+
+To package the application for sharing:
+
+1.  Run the packaging script:
+    ```bash
+    ./package.sh
+    ```
+    This will build the release binary and create a `dist/local_lens_v0.1.0.tar.gz` archive.
+
+2.  Share the `.tar.gz` file. The recipient should:
+    -   Extract the archive: `tar -xzvf local_lens_dist.tar.gz`
+    -   Open the folder: `cd local_lens_v0.1.0`
+    -   **Option A (Run once)**:
+        -   Run `./download-models.sh`
+        -   Run `./local_lens`
+    -   **Option B (Install as App)**:
+        -   Run `./install.sh`
+        -   This will download models, copy the app to `~/.local/bin`, and add it to the application menu.

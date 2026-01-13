@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Local Lens
+Comment=Privacy-focused AI Image Tagging
+Exec=local_lens
+Icon=utilities-terminal
+Terminal=false
+Categories=Graphics;Utility;
+Keywords=image;tagging;ai;ocr;
