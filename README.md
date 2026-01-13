@@ -95,4 +95,5 @@ To package the application for sharing:
         -   Run `./local_lens`
     -   **Option B (Install as App)**:
         -   Run `./install.sh`
-        -   This will download models, copy the app to `~/.local/bin`, and add it to the application menu.
+        -   This will download models (if missing), install them to `~/.local/share/local_lens/models`, copy the app to `~/.local/bin`, and add it to the application menu.
+        -   You can then launch "Local Lens" from your system launcher.

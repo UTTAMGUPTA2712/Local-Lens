@@ -8,28 +8,28 @@ pub struct OcrModel {
 
 impl OcrModel {
     pub fn new() -> Self {
-        let det_path = PathBuf::from("models/det_model.onnx");
-        let rec_path = PathBuf::from("models/rec_model.onnx");
-        let keys_path = PathBuf::from("models/en_dict.txt");
+        let det_path: Option<PathBuf> = crate::ml::find_model_file("det_model.onnx");
+        let rec_path: Option<PathBuf> = crate::ml::find_model_file("rec_model.onnx");
+        let keys_path: Option<PathBuf> = crate::ml::find_model_file("en_dict.txt");
 
-        if !det_path.exists() || !rec_path.exists() || !keys_path.exists() {
-            eprintln!("OCR models/keys not found (checked: {:?}, {:?}, {:?}). Text extraction disabled.", det_path, rec_path, keys_path);
-            return Self { engine: None };
-        }
+        if let (Some(det), Some(rec), Some(keys)) = (det_path, rec_path, keys_path) {
+            // Initialize Builder
+            let build_result = OAROCRBuilder::new(
+                det.to_str().unwrap(),
+                rec.to_str().unwrap(),
+                keys.to_str().unwrap()
+            ).build();
 
-        // Initialize Builder
-        let build_result = OAROCRBuilder::new(
-            det_path.to_str().unwrap(),
-            rec_path.to_str().unwrap(),
-            keys_path.to_str().unwrap()
-        ).build();
-
-        match build_result {
-            Ok(engine) => Self { engine: Some(engine) },
-            Err(e) => {
-                eprintln!("Failed to initialize OCR engine: {}", e);
-                Self { engine: None }
+            match build_result {
+                Ok(engine) => Self { engine: Some(engine) },
+                Err(e) => {
+                    eprintln!("Failed to initialize OCR engine: {}", e);
+                    Self { engine: None }
+                }
             }
+        } else {
+            eprintln!("OCR models/keys not found. Text extraction disabled.");
+            Self { engine: None }
         }
     }
 

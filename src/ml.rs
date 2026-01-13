@@ -2,15 +2,44 @@ use image::ImageReader;
 use ort::{inputs, session::Session, value::Value};
 use std::fs::File;
 use std::io::BufReader;
-use std::path::Path;
+use std::path::{Path, PathBuf};
+
+use std::env;
 
 #[derive(Clone, Debug)]
 pub struct Label {
     pub name: String,
 }
 
+pub fn find_model_file(filename: &str) -> Option<PathBuf> {
+    // 1. Check current working directory 'models/'
+    let cwd_path = Path::new("models").join(filename);
+    if cwd_path.exists() {
+        return Some(cwd_path);
+    }
+
+    // 2. Check ~/.local/share/local_lens/models
+    if let Ok(home) = env::var("HOME") {
+         let share_path = PathBuf::from(home).join(".local/share/local_lens/models").join(filename);
+         if share_path.exists() {
+             return Some(share_path);
+         }
+    }
+
+    // 3. Check /usr/share/local_lens/models
+    let sys_path = Path::new("/usr/share/local_lens/models").join(filename);
+    if sys_path.exists() {
+        return Some(sys_path);
+    }
+
+    None
+}
+
 pub fn load_labels() -> anyhow::Result<Vec<Label>> {
-    let file = File::open("models/imagenet-simple-labels.json")?;
+    let path = find_model_file("imagenet-simple-labels.json")
+        .ok_or_else(|| anyhow::anyhow!("Labels file not found"))?;
+
+    let file = File::open(path)?;
     let reader = BufReader::new(file);
     let names: Vec<String> = serde_json::from_reader(reader)?;
     

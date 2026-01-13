@@ -45,9 +45,12 @@ impl ImageTagger {
         // Initialize ORT
         let _ = ort::init().with_name("local_lens").commit();
 
-        let session = Session::builder()
-            .ok()
-            .and_then(|b| b.commit_from_file("models/resnet50-v2-7.onnx").ok())
+        let session = ml::find_model_file("resnet50-v2-7.onnx")
+            .and_then(|path| {
+                Session::builder()
+                    .ok()
+                    .and_then(|b| b.commit_from_file(path).ok())
+            })
             .map(|s| Arc::new(Mutex::new(s)));
 
         let labels = Arc::new(ml::load_labels().unwrap_or_default());
