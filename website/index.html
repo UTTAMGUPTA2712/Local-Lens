@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Lens - AI Powered Privacy Focused Image Organizer</title>
+    <meta name="description"
+        content="Local Lens is a privacy-focused, AI-powered image tagging and organization tool that runs entirely on your device.">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="blob"></div>
+    <div class="blob"></div>
+
+    <header>
+        <div class="logo">Local Lens</div>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#download">Download</a>
+            <a href="https://github.com/uttamgupta2712/local_lens" target="_blank">GitHub</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Your Photos.<br>Intelligently Organized.<br>Private Forever.</h1>
+        <p>AI-powered image tagging, OCR search, and metadata management.<br>Runs 100% locally on your machine. No
+            cloud, no tracking.</p>
+        <div class="cta-group">
+            <a href="#download" class="btn btn-primary">Get Local Lens</a>
+            <a href="#features" class="btn btn-secondary">Learn More</a>
+        </div>
+    </section>
+
+    <section id="features" class="features-section">
+        <h2 class="section-title">Why Local Lens?</h2>
+        <div class="features-grid">
+            <div class="card">
+                <h3>🔒 Privacy First</h3>
+                <p>Everything runs on your device. Your photos are never uploaded to the cloud, ensuring complete
+                    privacy and security for your personal memories.</p>
+            </div>
+            <div class="card">
+                <h3>🤖 AI Tagging</h3>
+                <p>Powered by ResNet50, Local Lens automatically detects objects and scenes in your photos, making them
+                    instantly searchable.</p>
+            </div>
+            <div class="card">
+                <h3>📄 Built-in OCR</h3>
+                <p>Need to find a document? Local Lens extracts text from images, so you can search for receipts, notes,
+                    and screenshots by their content.</p>
+            </div>
+            <div class="card">
+                <h3>🏷️ Metadata Sync</h3>
+                <p>Tags are written directly to standard EXIF/XMP metadata, making them compatible with your OS file
+                    manager and other photo apps.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="download" class="download-section">
+        <h2 class="section-title">Download Local Lens</h2>
+
+        <div id="version-container" class="download-container">
+            <!-- Content will be populated by script.js -->
+            <p style="color: var(--text-gray); text-align: center;">Loading latest version...</p>
+        </div>
+
+        <div id="previous-versions-container" class="previous-versions-container" style="display: none;">
+            <h3 class="section-subtitle">Previous Versions</h3>
+            <div id="previous-versions-list" class="previous-versions-list">
+                <!-- Previous versions populated by script.js -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Local Lens. Open Source under MIT License.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
